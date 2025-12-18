@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 
 export function signup(req: Request, res: Response)
 {
-    res.send("signup rout")
+    res.status(200).send('<h1>SignUp rout<h1>')
 }
 
 /**
