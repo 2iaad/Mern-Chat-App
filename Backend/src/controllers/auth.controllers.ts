@@ -88,3 +88,7 @@ export const logout = (req: Request, res: Response) => {
         res.status(500).json({ message: "Internal server error!" })
     }
 }
+
+export const editProfile = (req: Request, res: Response) => {
+
+}
