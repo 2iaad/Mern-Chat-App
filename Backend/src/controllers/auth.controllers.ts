@@ -1,44 +1,54 @@
-/**
-     Arrow Function (Function Expression) in a data holder: Functions you want to store in variables, pass around, or export.
- */
-
 import type { Request, Response } from "express";
 import User from '../models/user.model.ts'
 import bcrypt from "bcryptjs"
 
+import { generateJWT } from "../lib/utils.ts";
+
 export async function signup(req: Request, res: Response) {
     const { fullName, email, password } = req.body; // This line creates three separate variables, each one takes its value Ex: email = req.body.email
-    console.log("here1")
     try {
+        if (!fullName || !email || !password)
+            return res.status(400).json({message: "All fields are required!"})
+            
         if (password.length < 6) {
             console.log("Password too short, exiting");
             return res.status(400).json({message: "Password must be atleast 6 characters"})
         }
-        
-        const user = await User.findOne({email}) // looks for a document with this email inside the collection, then it return the document found || null, {email} stands for {email: ".."} its an object that we search for 
+
+        // looks for a document with this email inside the collection, then it return the document found || null, {email} stands for {email: ".."} its an object that we search for 
+        const user = await User.findOne({email})
         if (user) {
             
             console.log("User error");
             return res.status(400).json({message: "User already exists"})
         }
 
-        console.log("here2")
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        
-        console.log(hashedPassword)
+
+        // create new js object(document) that follows schema rules -> using User(model)
         const newUser = new User({
             fullName: fullName,
             email,
             password: hashedPassword
         })
-        console.log(newUser)
-        
-    } catch (error) {
-        
+
+        // generate JWT token
+        const jwToken = generateJWT(newUser._id, res);
+
+        // save newUser inside the DB with its jwToken
+        await newUser.save()
+
+        res.status(201).json({
+            message: "New user created!",
+            id: newUser._id,
+            fullName: newUser.fullName
+        })
+    } 
+    catch (error) {
+        console.log(`Error in signUp function controller`, error.message)
+        res.status(500).json( {message: "Internal server error!"} )
     }
-    console.log("here3")
-    return res.status(200).json({message: "GOOD!"})
 }
 
 export const login = (req: Request, res: Response) => {

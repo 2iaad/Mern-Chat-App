@@ -24,3 +24,14 @@ by Socket.IO.
     **routes** → decides which function runs for a given HTTP method and URL
     **controllers** → the functions implementations that actually does the work.
         The function usually handles (request/response) logic for an endpoint.
+
+### Difference between Node.js (js vanilla) & Express
+    Express provides simple methods that faciliates so many tasks.
+```
+| Feature      | Raw Node.js                  | Express                     |
+| ------------ | ---------------------------- | --------------------------- |
+| Routing      | Manual (`req.url`)           | `app.get()` / `app.post()`  |
+| Parsing JSON | Manual (`req.on('data')`)    | `express.json()` middleware |
+| Cookies      | Manual (`Set-Cookie` header) | `res.cookie()` helper       |
+| Middleware   | Manual functions             | `app.use()`                 |
+```
