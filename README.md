@@ -11,9 +11,10 @@ by Socket.IO.
 ```
     /src
     ├─ models/          <-- your Mongoose models (Models that manipulate the databases)
-    ├─ controllers/     <-- route logic (Code that handles requests sent to an EndPoint)
     ├─ routes/          <-- API routes (EndPoints)
-    └─ lib/             <-- reusable utilities (like connectDB)
+    ├─ controllers/     <-- route logic (Code that handles requests sent to an EndPoint)
+    ├─ middleware/      <-- Function that processes a request before it reaches the controller.
+    └─ lib/             <-- reusable utilities (like connectDB, generateJWT)
 ```
 
 ### Definitions
