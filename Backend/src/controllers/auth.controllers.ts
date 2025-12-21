@@ -8,7 +8,7 @@ import cloudinary from "../lib/cloudinary.ts";
 import { ObjectId } from "mongoose";
 
 export async function signup(req: Request, res: Response) {
-    const { fullName, email, password } = req.body; // This line creates three separate variables, each one takes its value Ex: email = req.body.email
+    const { fullName, email, password } = req.body; // This line creates three separate variables, each one takes its value Ex: email = req.body.emailc
     try {
         if (!fullName || !email || !password)
             return res.status(400).json({ message: "All fields are required!" })
@@ -110,7 +110,18 @@ export const editProfile: RequestHandler = async (req, res) => {
         res.status(200).json(updatedUser)
     }
     catch (error) {
-        console.log("Error in editProfile controller (auth.controllers.ts: 133)");
+        console.log("Error in editProfile controller (auth.controllers.ts: 113)", error.message);
+        return res.status(500).json({message: "Internal server error"})
+    }
+}
+
+// Purpose: keep the frontend’s “logged-in state” in sync with the server.
+export const checkAuth: RequestHandler = (req, res) => {
+    try {
+        return res.status(200).json((req as any).user);
+    }
+    catch (error) {
+        console.log("Error in checkAuth controller (auth.controllers.ts: )", error.message);
         return res.status(500).json({message: "Internal server error"})
     }
 }
