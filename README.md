@@ -8,6 +8,7 @@ by Socket.IO.
 
 ## Project structure
 
+
 ```
     /src
     ├─ models/          <-- your Mongoose models (Models that manipulate the databases)
@@ -18,8 +19,14 @@ by Socket.IO.
 ```
 
 ### Definitions
-    **Endpoint**: is a specific HTTP method + URL path that the client requests.
-    **Route**: is the code you write on the server that defines what happens when you visite the endpoint.
+
+    Route: is the code you write on the server that defines what happens when you visite the endpoint.
+    Endpoint: is a specific HTTP method + URL path that the client requests.
+
+    What a router actually does:
+        -> Matches HTTP method (GET, POST, etc.) + URL path
+        -> Runs middleware in order
+        -> Calls the controller
 
 ### in terms of directories:
     **routes** → decides which function runs for a given HTTP method and URL
@@ -36,11 +43,6 @@ by Socket.IO.
 | Cookies      | Manual (`Set-Cookie` header) | `res.cookie()` helper       |
 | Middleware   | Manual functions             | `app.use()`                 |
 ```
-
-
-
-
-
 
 # Auth Controller Documentation
 

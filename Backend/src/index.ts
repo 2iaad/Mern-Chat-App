@@ -21,13 +21,9 @@ const app = express();
 app.use(express.json()) // apply middleware to every request before reaching routes
 app.use(cookieParser()); // apply middleware to every request to parse the Cookie header into (key, value)
 
+// This means: forward any request that starts with /api/auth to authRoutes -> The router then decides what happens next
 app.use("/api/auth", authRoutes)
 app.use("/api/message", messageRoutes)
-
-/*
-    Route: is the code you write on the server that defines what happens when you visite the endpoint.
-    Endpoint: is a specific HTTP method + URL path that the client requests.
-*/
 
 app.listen(PORT, () => {
     console.log(`Server is running on port: ${PORT}`)
