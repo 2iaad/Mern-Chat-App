@@ -1,4 +1,5 @@
 import express from "express"
+import cookieParser from "cookie-parser";
 import { config } from "dotenv"
 
 import authRoutes from "./routes/auth.route.ts"
@@ -9,13 +10,16 @@ config();
 const PORT = process.env.PORT
 
 const app = express();
+
 /**
  ->  express.json() is a built-in middleware in Express.
  ->  Middleware = function that runs for every request before it reaches your route handlers.
  ->  express.json() parses incoming request bodies that are in JSON format.
  ->  It makes the data available on req.body inside your routes.
  */
-app.use(express.json()) // apply middleware to every route
+app.use(express.json()) // apply middleware to every request before reaching routes
+app.use(cookieParser()); // apply middleware to every request to parse the Cookie header into (key, value)
+
 app.use("/api/auth", authRoutes)
 
 /*

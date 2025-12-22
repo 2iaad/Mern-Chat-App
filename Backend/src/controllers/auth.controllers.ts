@@ -22,7 +22,7 @@ export async function signup(req: Request, res: Response) {
         const user = await User.findOne({ email })
         if (user) {
 
-            console.log("User error");
+            console.log("User already exists");
             return res.status(400).json({ message: "User already exists" })
         }
 
@@ -62,14 +62,14 @@ export const login = async (req: Request, res: Response) => {
 
         const user = await User.findOne({ email });
         if (!user)
-            return res.status(400).json({ message: "Invalide email" })
+            return res.status(400).json({ message: "No user with such email!" })
 
         const isPsswdCorrect = await bcrypt.compare(password, user.password)
         if (!isPsswdCorrect)
             return res.status(400).json({ message: "Invalide password" })
         generateJWT(user._id, res);
 
-        res.status(201).json({
+        res.status(200).json({
             message: "User logged in!",
             id: user._id,
             fullName: user.fullName
