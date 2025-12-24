@@ -69,7 +69,7 @@ export const sendMessage: RequestHandler = async (req, res) => {
 
         await newMessage.save();
 
-        // to-do: realtime functionality goes here using socket.io
+        // TODO: realtime functionality goes here using socket.io
         res.status(201).json(newMessage)
     } catch (error) {
         console.log("Error in sendMessage controller: ", error.message)
