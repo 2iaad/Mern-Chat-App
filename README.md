@@ -113,7 +113,7 @@ routing components imported from the `react-router-dom` package.
     -> So state lives outside the component tree, Components access it directly.
 > Pass state variables to components bla ktrt lhadra
 
-#### `daysiUI`
+#### `daisyUI`
 
     -> Tailwind CSS plugin that adds pre-built UI components and themes.
 > A plugin is a piece of code that depends on another library or tool + it cannot work alone; it depends on a library or framework + Adds extra features to an existing system.
