@@ -1,4 +1,4 @@
-# MERN Real-Time Chat App (Socket.IO + JWT Auth)
+# Interactive MERN Application (back-end + front-end) (Socket.IO + JWT Auth)
 
 A full-stack real-time chat application built with the MERN stack,
 featuring secure authentication using JWT and live messaging powered
