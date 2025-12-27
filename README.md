@@ -127,5 +127,3 @@ routing components imported from the `react-router-dom` package.
 
 This error happens because your Frontend (running on port 5173) and your Backend (running on port 5001) are on different "origins" (domains/ports). Browsers block these requests by default for security unless the backend explicitly allows them.
 Fix: used the `cors` package in the back-end.
-
-
