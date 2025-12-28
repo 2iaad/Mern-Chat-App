@@ -1,4 +1,7 @@
 import { v2 as cloudinary } from "cloudinary"
+import { config } from "dotenv";
+
+config();
 
 // object contains credentials that identify my Cloudinary account.
 const argument = {

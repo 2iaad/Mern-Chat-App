@@ -103,14 +103,14 @@ export const editProfile: RequestHandler = async (req, res) => {
         const uploadResponse = await cloudinary.uploader.upload(profilePicture);
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { profilePic: uploadResponse.secure_url },
-            { new: true }
+            { profilePicture: uploadResponse.secure_url },
+            { new: true } // return the new updated user object
         )
 
         res.status(200).json(updatedUser)
     }
     catch (error) {
-        console.log("Error in editProfile controller (auth.controllers.ts: 113)", error.message);
+        console.log("Error in editProfile controller (auth.controllers.ts)", error.message);
         return res.status(500).json({message: "Internal server error"})
     }
 }

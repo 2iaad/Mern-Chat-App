@@ -19,7 +19,7 @@ export default function App() {
 		checkAuth();
 	}, [checkAuth])
 
-	console.log(authUserObj)
+	console.log(`Authentificated user: ${authUserObj}`)
 
 	if (isCheckingAuth && !authUserObj) // show spinner
 	{

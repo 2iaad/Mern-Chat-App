@@ -10,17 +10,18 @@ export default function ProfilePage() {
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
-        if (!file) return ;
+        if (!file) return;
 
         const reader = new FileReader();
         reader.readAsDataURL(file)
 
-        // reader.onload = async () => {
-        //     const base64Image = reader.result;
-        //     setSelectedImg(base64Image)
-        //     await updateProfile({profilePic: base64Image})
-        // }
+        reader.onloadend = async () => {
+            const base64data = reader.result;
+            setSelectedImg(base64data); // update state to render new image
+            await updateProfile({profilePicture: base64data}) // update MongoDB
+        }
     }
+    console.log(authUserObj.profilePicture)
 
     return (
         <div className="h-screen pt-20 bg-gray-800">
@@ -36,7 +37,7 @@ export default function ProfilePage() {
                     <div className="flex flex-col items-center gap-4">
                         <div className="relative">
                             <img
-                                src={selectedImg || authUserObj.profilePic || staticImage}
+                                src={selectedImg || authUserObj.profilePicture || staticImage}
                                 className="size-32 rounded-full object-cover border-4 "
                             />
                             <label
@@ -51,7 +52,7 @@ export default function ProfilePage() {
                                 <input type="file" id="avatar-upload" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUpdatingProfile} />
                             </label>
                         </div>
-                        
+
                         <p className="text-sm text-zinc-400">
                             {isUpdatingProfile ? "Uploading..." : "Click the camera icon to update your photo"}
                         </p>

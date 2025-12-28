@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
+interface UpdateProfilePayload {
+    profilePicture?: string | ArrayBuffer | null;
+}
+
 interface AuthStore {
     authUserObj: any;
     isSigningUp: boolean;
@@ -12,20 +16,14 @@ interface AuthStore {
     signup: (data: userDataType) => Promise<void>; // ? 
     login: (data: userDataType) => Promise<void>; // ? 
     logout: (data: userDataType) => Promise<void>; // ? 
-    updateProfile: (data: userDataType) => Promise<void>; // ? 
+    updateProfile: (payload: UpdateProfilePayload) => Promise<void>; // ? 
 }
 
 type userDataType = {
     fullName?: String,
     email: String,
     password: String,
-    profilePic?: string | ArrayBuffer | null;
 }
-
-// type loginuserDataType = {
-//     email: String,
-//     password: String
-// }
 
 {/*
     -> export const useAuthStore = create<AuthStore>(...)
@@ -110,17 +108,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
         } 
     },
 
-    updateProfile: async (payload: { fullName?: string; profilePicture?: string }) => {
-        set({isUpdatingProfile: true})
-        try {
-            const res = await axiosInstance.put("/auth/edit-profile");
-            set({authUserObj: res.data})
-            toast.success("Photo uploaded successfully!")
-        } catch (error) {
-            toast.error("Couldn't upload photo!")
+    updateProfile: async (data: UpdateProfilePayload) => {
 
+        set({ isUpdatingProfile: true });
+        try {
+            const res = await axiosInstance.put("/auth/edit-profile", data);
+            set({authUserObj: res.data})
+            toast.success("Profile photo updated!")
+
+        } catch (error) {
+            toast.error("Failed to update profile");
         } finally {
-            set({isCheckingAuth: false})
+            set({ isUpdatingProfile: false });
         }
     }
 }))
