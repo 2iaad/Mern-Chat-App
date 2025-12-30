@@ -5,7 +5,6 @@ import cloudinary from "../lib/cloudinary.ts";
 
 export const getUsersForSideBar: RequestHandler = async (req, res) => {
 
-    console.log("99");
     try {
 
         const loggedInId = (req as any).user._id;

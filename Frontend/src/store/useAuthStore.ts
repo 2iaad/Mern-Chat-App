@@ -1,10 +1,7 @@
+import type { User } from "../store/useChatStore"
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-
-interface UpdateProfilePayload {
-    profilePicture?: string | ArrayBuffer | null;
-}
 
 interface AuthStore {
     authUserObj: any;
@@ -12,17 +9,24 @@ interface AuthStore {
     isLoggingIn: boolean;
     isUpdatingProfile: boolean;
     isCheckingAuth: boolean;
-    checkAuth: () => Promise<void>; // ? 
-    signup: (data: userDataType) => Promise<void>; // ? 
-    login: (data: userDataType) => Promise<void>; // ? 
-    logout: (data: userDataType) => Promise<void>; // ? 
+    onlineUsers: User[];
+
+    checkAuth: () => Promise<void>;
+    signup: (data: userDataType) => Promise<void>;
+    login: (data: userDataType) => Promise<void>;
+    logout: (data: userDataType) => Promise<void>;
     updateProfile: (payload: UpdateProfilePayload) => Promise<void>; // ? 
+}
+
+interface UpdateProfilePayload {
+    profilePicture?: string | ArrayBuffer | null;
 }
 
 type userDataType = {
     fullName?: String,
     email: String,
     password: String,
+    profilePicture: String,
 }
 
 {/*
@@ -40,12 +44,12 @@ type userDataType = {
 export const useAuthStore = create<AuthStore>((set) => ({
 
     // data we are tracking on each browser refresh:
-    authUserObj: null, // -> user object {_id, fullName, email ..etc}
+    authUserObj: null,
     isSigningUp: false,
     isLoggingIn: false,
     isUpdatingProfile: false,
-
-    isCheckingAuth: true, // to show spinner when the browser refreshs and triggers the useEffect
+    isCheckingAuth: true,
+    onlineUsers: [],
 
     checkAuth: async () => {
         try {

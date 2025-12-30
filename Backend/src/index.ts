@@ -31,8 +31,8 @@ app.use(express.json({ limit: "10mb" })); // apply middleware to every request b
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // This means: forward any request that starts with /api/auth to authRoutes -> The router then decides what happens next
+app.use("/api/messages", messagesRoutes);
 app.use("/api/auth", authRoutes)
-app.use("/api/messages", messagesRoutes)
 
 app.listen(PORT, () => {
     console.log('\n' + `Server is running on port: ${PORT}`)

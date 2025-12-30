@@ -81,3 +81,5 @@
         -> i call the `handleImageUpload`
         -> get file from **e** object
         -> call the updateProfile() action that sends the PUT request to the "/auth/edit-profile" along with the picture *(to upload image to claudinary + update the DB)*.
+
+8. ### Build the home page (chat)
