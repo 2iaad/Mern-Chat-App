@@ -8,12 +8,6 @@
 
 import mongoose from "mongoose";
 
-/**
- *  -> Including a library that adds schema enforcement, models..
- *  -> Schemas acts as a guard before data reaches MongoDB
- *  we are defining: An application database schema (fields, type of each field, initial value ..ect)
- */
-
 const userSchema = new mongoose.Schema(
     {
         email: {

@@ -1,13 +1,17 @@
 import { useEffect } from "react";
-import { useChatStore } from "@/store/useChatStore";
+import { type ChatStoreStateType, useChatStore } from "@/store/useChatStore";
 import ChatHeader from "./HomePage-ChatContainer/ChatHeader";
 import MessageInput from "./HomePage-ChatContainer/MessageInput";
 import Messages from "./HomePage-ChatContainer/Messages";
 import MessagesSkeleton from "./skeletons/MessagesSkeleton";
 
-
 export default function ChatContainer() {
-  const { messages, getMessages, isMessagesLoading, selectedUser } = useChatStore();
+
+  // using selector to prevent re-render on other variable changes (optimization)
+  const messages = useChatStore((s) => s.messages);
+  const getMessages = useChatStore((s) => s.getMessages);
+  const isMessagesLoading = useChatStore((s) => s.isMessagesLoading);
+  const selectedUser = useChatStore((s) => s.selectedUser);
 
   useEffect(() => {
     if (selectedUser)

@@ -7,7 +7,7 @@ export default function Navbar() {
 
     function handleLogout(e: React.MouseEvent<HTMLAnchorElement>) {
         e.preventDefault();
-        logout(authUserObj);
+        logout(authUserObj!);
     }
 
     return (

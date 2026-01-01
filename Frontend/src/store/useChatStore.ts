@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, type ExtractState } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 
@@ -10,32 +10,35 @@ type Message = {    _id: string;
                     image: string | null;
                     createdAt: string
                 };
-
 type MessageData = {
     text?: string;
     image?: string | null;
 }
-                
-interface ChatStore {
+
+interface ChatStoreStates {
     users: User[],
     messages: Message[],
     selectedUser: User | null,
     isUsersLoading: boolean,
     isMessagesLoading: boolean,
+}
 
+interface ChatStoreActions {
     getUsers: () => Promise<void>;
     getMessages: (otherUserId: string) => Promise<void>;
     sendMessage: (message: MessageData) => Promise<void>;
     setSelectedUser: (selectedUser: User | null) => void;
 }
 
-export const useChatStore = create<ChatStore>((set, get) => ({
+export const useChatStore = create<ChatStoreStates & ChatStoreActions>((set, get) => ({
     
     users: [],
     messages: [],
     selectedUser: null,
     isUsersLoading: false,
     isMessagesLoading: false,
+
+    setSelectedUser: (selectedUser: User | null) => set({selectedUser}),
 
     getUsers: async () => {
         
@@ -71,8 +74,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         } catch (error) {
             toast.error("Error: in sendMessage(): couldn't send message!");
         }
-    },
-    
-    
-    setSelectedUser: (selectedUser: User | null) => set({selectedUser})
+    }
 }))
+
+export type ChatStoreStateType = ExtractState<typeof useChatStore>

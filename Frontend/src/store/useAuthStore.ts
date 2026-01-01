@@ -3,8 +3,19 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
+type AuthUser = {
+    _id: string
+    email: string
+    fullName: string
+    profilePicture: string
+    createdAt: string
+    updatedAt: string
+}
+type loginData = { email: string, password: string }
+type signupData = loginData & { fullName: string }
+
 interface AuthStore {
-    authUserObj: any;
+    authUserObj: AuthUser | null;
     isSigningUp: boolean;
     isLoggingIn: boolean;
     isUpdatingProfile: boolean;
@@ -12,34 +23,11 @@ interface AuthStore {
     onlineUsers: User[];
 
     checkAuth: () => Promise<void>;
-    signup: (data: userDataType) => Promise<void>;
-    login: (data: userDataType) => Promise<void>;
-    logout: (data: userDataType) => Promise<void>;
-    updateProfile: (payload: UpdateProfilePayload) => Promise<void>; // ? 
+    signup: (data: signupData) => Promise<void>;
+    login: (data: loginData) => Promise<void>;
+    logout: (data: AuthUser) => Promise<void>;
+    updateProfile: (data: string | ArrayBuffer | null) => Promise<void>;
 }
-
-interface UpdateProfilePayload {
-    profilePicture?: string | ArrayBuffer | null;
-}
-
-type userDataType = {
-    fullName?: String,
-    email: String,
-    password: String,
-    profilePicture: String,
-}
-
-{/*
-    -> export const useAuthStore = create<AuthStore>(...)
-        * create returns a React hook (useAuthStore) that components call to read/update a shared, global state.
-    -> (set) => ({ ... })
-        * This initializer runs once when the page refreshs.
-        * set is Zustand’s updater. we call set({ key: value }) to update state and trigger re-renders.
-
-    States: (authUserObj, isSigningUp, isLoggingIn, isUpdatingProfile)
-
-    Actions: (checkAuth, signup)
-*/}
 
 export const useAuthStore = create<AuthStore>((set) => ({
 
@@ -65,7 +53,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         }
     },
 
-    signup: async (data: userDataType) => {
+    signup: async (data) => {
 
         set({ isSigningUp: true });
 
@@ -77,13 +65,13 @@ export const useAuthStore = create<AuthStore>((set) => ({
             toast.success("Account created successfully")
         } catch (error) {
             console.log("error")
-            toast.error((error as any).Response?.data?.message);
+            toast.error((error as any).response?.data?.message);
         } finally {
             set({ isSigningUp: false });
         }
     },
 
-    login: async (data: userDataType) => {
+    login: async (data) => {
 
         set({ isLoggingIn: true })
 
@@ -100,7 +88,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         }
     },
     
-    logout: async (data: userDataType) => {
+    logout: async (data) => {
 
         try {
             axiosInstance.post("/auth/logout", data)
@@ -112,7 +100,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         } 
     },
 
-    updateProfile: async (data: UpdateProfilePayload) => {
+    updateProfile: async (data) => {
 
         set({ isUpdatingProfile: true });
         try {
