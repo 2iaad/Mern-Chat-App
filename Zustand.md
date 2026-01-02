@@ -30,3 +30,4 @@ function Controls() {
 - in version 2:
     1. Subscribes the component to the entire store
     2. The component re-renders on any store change
+
