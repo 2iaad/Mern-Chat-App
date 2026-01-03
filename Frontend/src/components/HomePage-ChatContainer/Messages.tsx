@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import MessagesSkeleton from "../skeletons/MessagesSkeleton";
 import { useAuthStore } from "@/store/useAuthStore";
+import { formatMessageTime } from "@/lib/utils";
 
 export default function Messages() {
 
@@ -35,7 +36,7 @@ export default function Messages() {
 
 		<div className="chat-header mb-1">
 		  <time className="text-xs opacity-50 ml-1">
-			{message.createdAt}
+			{formatMessageTime(message.createdAt)}
 		  </time>
 		</div>
 

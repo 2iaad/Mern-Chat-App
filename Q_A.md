@@ -9,3 +9,12 @@
     }
 ```
     in this case the arr might be an Array that does not have the .trim method. so typing it out in the prototype will let use know the type of the array (map, vetor.. etc) before having the app crashed
+
+# what is an API ?
+
+An API is a set of rules that lets one program ask another program to do something or give it data in a devoloper-defined way.
+its an interface for a program to request something from another program (front-end, back-end)
+
+# what is REST API?
+
+A REST API is a way to expose application data by sending an HTTP request to an URL(resource) to transfer a data in a stateless way(The server does not remember anything about previous requests - each request is fully independent - does not need memory to serve content).
