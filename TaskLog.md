@@ -82,22 +82,30 @@
         -> get file from **e** object
         -> call the updateProfile() action that sends the PUT request to the "/auth/edit-profile" along with the picture *(to upload image to claudinary + update the DB)*.
 
-8. ### Build the home page (Sidebar section)
+8. ### Build the home(chat) page (Sidebar section)
 
     - inside the `<Sidebar>` component, im calling the getUsers() that sends a GET request using axios to this endpoint from the back-end "/api/messages/users"
     - the controller `getUsersForSideBar()`is called, i get the currect user, use the User model to fetch from the Mongo dataBase all the users except for me.
     - i get the response and update the users state variable using the set() function.
     - React re-renders Sidebar: Sidebar re-renders, now receiving the updated users array.
 
-9. ### Build the home page (ChatContainer section)
+9. ### Build the home(chat) page (ChatContainer section)
 
-    - **Messages input section:**
-        Made a form the has 2 input fields:
-            - Message input:            
-                This is a controlled text field, means we integrate the a state variable (text) to store the input in it.
-            - File input:
-                call handleImageChange to read the file.
-                set the state variable `imagePreview` with the selected image from the user.
-            - Send button {type:submit}:
+    - **Messages input section:** Made a form the has 2 input fields:
+        - Message input:            
+            This is a controlled text field, means we integrate the a state variable (text) to store the input in it.
+        - File input:
+            call handleImageChange to read the file.
+            set the state variable `imagePreview` with the selected image from the user.
+        - Send button {type:submit}:
                 its disabled if there is no `text || imagePreview`.
                 calls the handleSendMessage() -> that sends the message to the backend controller + save message in the dataBase + Update message state (messages list)
+
+10. ### Build the home(chat) page (Messages section)
+
+    - import the messages state from the useChatStore.
+    - call the getMessages via the useEffect() hook to update messages along with the selectedUser in the dependency array.
+    - convert the messages object to jsx using *.map()*.
+    - render the the array returned.
+
+11. ### integrate WebSockets.

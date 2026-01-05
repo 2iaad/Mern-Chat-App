@@ -4,9 +4,11 @@ import { getUsersForSideBar, getMessages, sendMessage } from "../controllers/mes
 
 const router = express.Router()
 
-router.get("/users", protectRoute, getUsersForSideBar)
-router.get("/:id", protectRoute, getMessages) // The ":" indicates a dynamic parameter.
+router.use(protectRoute);
 
-router.post("/send/:id", protectRoute, sendMessage)
+router.get("/users", getUsersForSideBar)
+router.get("/:id", getMessages) // The ":" indicates a dynamic parameter.
+
+router.post("/send/:id", sendMessage)
 
 export default router;

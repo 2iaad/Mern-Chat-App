@@ -1,3 +1,55 @@
+# Back-end Project Structure
+
+### `➜  Mern-Chat-App git:(main) tree Backend -L 2`
+
+```
+    Backend
+    ├── node_modules
+    │   ├── @cspotcode
+    │   ├── ......
+    │   └── yn
+    ├── package-lock.json
+    ├── package.json
+    ├── README.md
+    └── src
+        ├── controllers     <-- route logic (Code that handles requests sent to an EndPoint)
+        ├── index.ts
+        ├── lib             <-- reusable utilities (like connectDB, generateJWT)
+        ├── middleware      <-- Function that is applied to a request before it reaches the controllers.
+        ├── models          <-- your Mongoose models (Models that manipulate the databases)
+        └── routes          <-- API routes (EndPoints)
+```
+
+### Definitions
+Route: is the code you write on the server that defines what happens when you visite the endpoint.
+Endpoint: is a specific HTTP method + URL path that the client requests.
+
+    What a router actually does:
+        -> Matches HTTP method (GET, POST, etc.) + URL path
+        -> Runs middleware in order
+        -> Calls the controller
+
+### in terms of directories:
+    **routes** → decides which function runs for a given HTTP method and URL
+    **controllers** → the functions implementations that actually does the work.
+        The function usually handles (request/response) logic for an endpoint.
+
+### Difference between Node.js (js vanilla) & Express
+    Express provides simple methods that faciliates so many tasks.
+```
+| Feature      | Raw Node.js                  | Express                     |
+| ------------ | ---------------------------- | --------------------------- |
+| Routing      | Manual (`req.url`)           | `app.get()` / `app.post()`  |
+| Parsing JSON | Manual (`req.on('data')`)    | `express.json()` middleware |
+| Cookies      | Manual (`Set-Cookie` header) | `res.cookie()` helper       |
+| Middleware   | Manual functions             | `app.use()`                 |
+```
+
+
+
+
+
+
 # Auth Controller Documentation
 
 This document explains the functions inside `auth.controllers.ts` located in the `Backend/src/controllers` directory. These functions handle user authentication logic for the MERN Chat App backend.
@@ -59,21 +111,24 @@ Allows the authenticated user to update their profile picture.
 - Updates the user's `profilePic` field in the database with the new image URL.
 - Returns the updated user document or an error message if the update fails.
 
----
 
-## Usage
+# Socket Integration Documentation
 
-These controller functions are typically used in Express routes to handle authentication endpoints, such as `/api/auth/signup`, `/api/auth/login`, `/api/auth/logout`, and `/api/auth/edit-profile`.
+## Sockets Overview
 
----
+Socket.IO is a javascript library that allows two-way communication between your Node.js server and your web client
 
-## Notes
+Socket.IO does not create its own HTTP server, it attaches itself to an existing Node HTTP server.
 
-- All functions handle errors gracefully and return appropriate HTTP status codes.
-- Passwords are securely hashed before storage.
-- JWT tokens are used for authentication and session management.
-- Profile pictures are uploaded and stored using Cloudinary.
+## Steps Overview
 
----
+### 1. creating http server
 
-For more details, refer to the code in `Backend/src/controllers/auth.controllers.ts`.
+`const app = express()`: returns a function that handles routing logic for the HTTP requests.
+`app.listen(PORT)` will create a server internally that we dont have access to.
+
+> That’s a problem for sockets: WebSockets require access to the HTTP server instance inorder to attach WebSocket listeners.
+
+thats why we switch to using the `const server = createServer(app)` to create an http server.
+
+### 2. 

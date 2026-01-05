@@ -2,6 +2,9 @@ import type { User } from "../store/useChatStore"
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import { io } from "socket.io-client"
+
+const BACKEND_URL: string = "http://localhost:5001"
 
 type AuthUser = {
     _id: string
@@ -21,15 +24,18 @@ interface AuthStore {
     isUpdatingProfile: boolean;
     isCheckingAuth: boolean;
     onlineUsers: User[];
+    socket: any;
 
     checkAuth: () => Promise<void>;
     signup: (data: signupData) => Promise<void>;
     login: (data: loginData) => Promise<void>;
     logout: (data: AuthUser) => Promise<void>;
     updateProfile: (data: string | ArrayBuffer | null) => Promise<void>;
+    connectSocket: () => void;
+    disconnectSocket: () => void;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>((set, get) => ({
 
     // data we are tracking on each browser refresh:
     authUserObj: null,
@@ -38,13 +44,15 @@ export const useAuthStore = create<AuthStore>((set) => ({
     isUpdatingProfile: false,
     isCheckingAuth: true,
     onlineUsers: [],
+    socket: null,
 
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get("/auth/check");
-
             // in controller i return (req.user), but Axios receives that JSON, and puts it in res.data.
             set({ authUserObj: res.data });
+
+            get().connectSocket()
         } catch (error) { // triggered if backend responds with error status code (anything outside 200–299).
             console.log("Error in checkAuth: ", error)
             set({ authUserObj: null });
@@ -60,9 +68,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
         try {
             const res = await axiosInstance.post("/auth/signup", data)
             set({ authUserObj: res.data })
-
-            console.log("success")
             toast.success("Account created successfully")
+
+            get().connectSocket()
         } catch (error) {
             console.log("error")
             toast.error((error as any).response?.data?.message);
@@ -79,8 +87,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
             const res = await axiosInstance.post("/auth/login", data);
             set({ authUserObj: res.data })
-
             toast.success("Logged to account successfully")
+
+            get().connectSocket()
         } catch (error) {
             toast.error("Failed to login")
         } finally {
@@ -93,8 +102,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
         try {
             axiosInstance.post("/auth/logout", data)
             set({authUserObj: null})
-
             toast.success("Logged out successfully")
+
+            get().disconnectSocket()
         } catch (error) {
             toast.error("Can't logout user");
         } 
@@ -113,5 +123,19 @@ export const useAuthStore = create<AuthStore>((set) => ({
         } finally {
             set({ isUpdatingProfile: false });
         }
+    },
+
+    connectSocket: () => {
+        const { authUserObj } = get()
+        if (!authUserObj || get().socket?.connected)
+            return ;
+
+        set ({socket: io(BACKEND_URL)})
+        get().socket.connect();
+    },
+    disconnectSocket: () => {
+        const { socket } = get()
+        if (socket?.connected)
+            socket.disconnect();
     }
 }))
