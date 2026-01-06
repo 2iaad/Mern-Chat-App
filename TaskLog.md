@@ -29,10 +29,7 @@
 
     2. then the `protectRoute` middleware from the backend is called the check if there is valide user sending the request by checking the jwt from the request `Cookie` header.
 
-    3. 
-        if the jwt token is valide we send back to the front req.user
-        else a throw is catched and we know that there is no user.
-
+    3. if the jwt token is valide we send back to the front req.user *else* a throw is catched and we know that there is no user.
 
 4. ### Protect routes based on the authentification status.
 
@@ -60,9 +57,7 @@
 
     - parse the login input onSubmit.
     - then i init the global state object *authUserObject* with the input that have been submitted.
-    - then i call the action funtion from the global state *login* to send a POST request to:
-        `/auth/login`
-        to check if the user already exists or not.
+    - then i call the action funtion from the global state *login* to send a POST request to: `/auth/login` to check if the user already exists or not.
 
     #### logout:
 
